@@ -1,1 +1,1 @@
-##MineSweeper Web APP made using C# MVC
+## MineSweeper Web APP made using C# MVC
