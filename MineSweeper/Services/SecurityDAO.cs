@@ -30,8 +30,8 @@ namespace RegisterAndLoginApp.Services
                 MySqlCommand command = new MySqlCommand(sqlStatement, connection);
 
                 //Define the values of the two placeholders in the sqlStatement string
-                command.Parameters.Add("@USERNAME", System.Data.MySqlDbType.VarChar, 50).Value = user.UserName;
-                command.Parameters.Add("@PASSWORD", System.Data.MySqlDbType.VarChar, 50).Value = user.Password;
+                command.Parameters.Add("@USERNAME", MySqlDbType.VarChar, 50).Value = user.UserName;
+                command.Parameters.Add("@PASSWORD", MySqlDbType.VarChar, 50).Value = user.Password;
 
                 try
                 {
@@ -69,8 +69,8 @@ namespace RegisterAndLoginApp.Services
                 MySqlCommand command = new MySqlCommand(sqlStatement, connection);
 
                 //Define the values of the two placeholders in the sqlStatement string
-                command.Parameters.Add("@USERNAME", System.Data.MySqlDbType.VarChar, 50).Value = user.UserName;
-                command.Parameters.Add("@EMAIL", System.Data.MySqlDbType.VarChar, 50).Value = user.Email;
+                command.Parameters.Add("@USERNAME", MySqlDbType.VarChar, 50).Value = user.UserName;
+                command.Parameters.Add("@EMAIL", MySqlDbType.VarChar, 50).Value = user.Email;
 
                 try
                 {
