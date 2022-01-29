@@ -1,10 +1,10 @@
-﻿using RegisterAndLoginApp.Models;
+﻿using MineSweeper.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RegisterAndLoginApp.Services
+namespace MineSweeper.Services
 {
     public class SecurityService
     {
@@ -22,7 +22,13 @@ namespace RegisterAndLoginApp.Services
 
         public bool RegisterIsValid(UserModel user)
         {
-            return securityDAO.ValidateRegister(user);
+            bool validRegister = false;
+            if(securityDAO.ValidateRegister(user))
+            {
+                validRegister = securityDAO.InsertNewUser(user);
+                
+            }
+            return validRegister;
         }
     }
 }

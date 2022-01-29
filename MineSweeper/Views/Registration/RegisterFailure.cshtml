@@ -1,0 +1,12 @@
+﻿@model MineSweeper.Models.UserModel
+
+
+
+<div>
+    <h4>UserModel</h4>
+    <p>@Model.UserName / @Model.Email is already in use and can not be used again. Please try again</p>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
