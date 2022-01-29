@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace MineSweeper.Controllers
 {
-    public class Registration : Controller
+    public class LoginController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult ProcessRegister(UserModel user)
+        public IActionResult ProcessLogin(UserModel user)
         {
             SecurityService securityService = new SecurityService();
-            if (securityService.RegisterIsValid(user))
+            if (securityService.LoginIsValid(user))
             {
-                return View("RegisterSuccess", user);
+                return View("LoginSuccess", user);
             }
             else
             {
-                return View("RegisterFailure", user);
+                return View("LoginFailure", user);
             }
         }
     }

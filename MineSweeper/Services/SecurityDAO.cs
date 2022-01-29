@@ -1,12 +1,12 @@
-﻿using RegisterAndLoginApp.Models;
+﻿
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using MineSweeper.Models;
 using MySql.Data.MySqlClient;
 
-namespace RegisterAndLoginApp.Services
+namespace MineSweeper.Services
 {
     public class SecurityDAO
     {
@@ -114,8 +114,8 @@ namespace RegisterAndLoginApp.Services
                 //Define the values of the two placeholders in the sqlStatement string
                 command.Parameters.Add("@FIRSTNAME", MySqlDbType.VarChar, 100).Value = user.FirstName;
                 command.Parameters.Add("@LASTNAME", MySqlDbType.VarChar, 100).Value = user.LastName;
-                command.Parameters.Add("@SEX", MySqlDbType.Int, 11).Value = user.Sex;
-                command.Parameters.Add("@AGE", MySqlDbType.Int, 11).Value = user.Age;
+                command.Parameters.Add("@SEX", MySqlDbType.Int32, 11).Value = user.Sex;
+                command.Parameters.Add("@AGE", MySqlDbType.Int32, 11).Value = user.Age;
                 command.Parameters.Add("@STATE", MySqlDbType.VarChar, 100).Value = user.State;
                 command.Parameters.Add("@EMAIL", MySqlDbType.VarChar, 200).Value = user.Email;
                 command.Parameters.Add("@USERNAME", MySqlDbType.VarChar, 200).Value = user.UserName;
@@ -126,7 +126,7 @@ namespace RegisterAndLoginApp.Services
                     connection.Open();
                     MySqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.HasRows)
+                    if (!reader.HasRows)
                     {
                         success = true;
                     }
