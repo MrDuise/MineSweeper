@@ -1,4 +1,5 @@
-﻿using RegisterAndLoginApp.Models;
+﻿using MineSweeper.Models;
+using RegisterAndLoginApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
