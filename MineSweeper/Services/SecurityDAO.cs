@@ -112,14 +112,14 @@ namespace RegisterAndLoginApp.Services
                 MySqlCommand command = new MySqlCommand(sqlStatement, connection);
 
                 //Define the values of the two placeholders in the sqlStatement string
-                command.Parameters.Add("@FIRSTNAME", System.Data.MySqlDbType.VarChar, 100).Value = user.FirstName;
-                command.Parameters.Add("@LASTNAME", System.Data.MySqlDbType.VarChar, 100).Value = user.LastName;
-                command.Parameters.Add("@SEX", System.Data.MySqlDbType.Int, 11).Value = user.Sex;
-                command.Parameters.Add("@AGE", System.Data.MySqlDbType.Int, 11).Value = user.Age;
-                command.Parameters.Add("@STATE", System.Data.MySqlDbType.VarChar, 100).Value = user.State;
-                command.Parameters.Add("@EMAIL", System.Data.MySqlDbType.VarChar, 200).Value = user.Email;
-                command.Parameters.Add("@USERNAME", System.Data.MySqlDbType.VarChar, 200).Value = user.UserName;
-                command.Parameters.Add("@PASSWORD", System.Data.MySqlDbType.VarChar, 200).Value = user.Password;
+                command.Parameters.Add("@FIRSTNAME", MySqlDbType.VarChar, 100).Value = user.FirstName;
+                command.Parameters.Add("@LASTNAME", MySqlDbType.VarChar, 100).Value = user.LastName;
+                command.Parameters.Add("@SEX", MySqlDbType.Int, 11).Value = user.Sex;
+                command.Parameters.Add("@AGE", MySqlDbType.Int, 11).Value = user.Age;
+                command.Parameters.Add("@STATE", MySqlDbType.VarChar, 100).Value = user.State;
+                command.Parameters.Add("@EMAIL", MySqlDbType.VarChar, 200).Value = user.Email;
+                command.Parameters.Add("@USERNAME", MySqlDbType.VarChar, 200).Value = user.UserName;
+                command.Parameters.Add("@PASSWORD", MySqlDbType.VarChar, 200).Value = user.Password;
 
                 try
                 {
