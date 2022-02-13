@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MineSweeper.Models.ButtonModel>
+
+
+<style>
+    .game-button {
+        width: 74px;
+        height: 74px;
+        text-align: center;
+    }
+
+    .game-button-image {
+        width: 70%;
+    }
+
+    .button-zone {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .line-break {
+        flex-basis: 100%;
+        height: 0;
+    }
+
+
+
+</style>
+
+
+
+<form>
+
+
+    <div class="button-zone">
+
+        
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            if (i % 5 == 0)
+            {
+                <div class="line-break"></div>
+            }
+
+            <button class="game-button" name="buttonNumber" value="@Model.ElementAt(i).id" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                @if (Model.ElementAt(i).visited == true)
+                {
+                    <img class="game-button-image" src="~/img/BlueB.png" />
+                }
+                else
+                {
+                    <img class="game-button-image" src="~/img/ButtonImg.jpg" />
+                }
+                
+            </button>
+            
+                
+
+        }
+    </div>
+
+</form>
