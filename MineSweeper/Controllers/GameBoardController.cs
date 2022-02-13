@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace MineSweeper.Controllers
 {
     public class GameBoardController : Controller
@@ -21,9 +22,18 @@ namespace MineSweeper.Controllers
                     buttons.Add(new ButtonModel(i));
                 }
             }
+            return View("Index", buttons);
+        }
 
+        public IActionResult HandleButtonClick(string buttonNumber)
+        {
+           
+            int bn = int.Parse(buttonNumber);
 
+            buttons.ElementAt(bn).visited = true;
 
+            
+           
             return View("Index", buttons);
         }
     }
