@@ -1,5 +1,6 @@
 ﻿@model MineSweeper.Models.UserModel
 
+<br />
 <h4>Registration</h4>
 <hr />
 <div class="row">
@@ -46,8 +47,9 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
+                <input type="submit" value="Register" class="btn btn-outline-primary" />
             </div>
         </form>
     </div>

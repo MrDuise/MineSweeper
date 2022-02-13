@@ -23,23 +23,20 @@
     }
 
 
-
 </style>
 
+<br />
 
 
 <form>
-
-
     <div class="button-zone">
-
-        
         @for (int i = 0; i < Model.Count(); i++)
         {
             if (i % 5 == 0)
             {
                 <div class="line-break"></div>
             }
+
 
             <button class="game-button" name="buttonNumber" value="@Model.ElementAt(i).id" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
                 @if (Model.ElementAt(i).visited == true)
@@ -50,12 +47,7 @@
                 {
                     <img class="game-button-image" src="~/img/ButtonImg.jpg" />
                 }
-                
             </button>
-            
-                
-
         }
-    </div>
-
+  </div>
 </form>
