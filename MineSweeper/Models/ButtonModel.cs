@@ -12,8 +12,8 @@ namespace MineSweeper.Models
         public bool live { get; set; }
         public int liveNeighbors { get; set; }
         public bool flag { get; set; }
-
         public string buttonFile { get; set; }
+        public bool enabled { get; set; }
 
         /// <summary>
         /// Constructor. Sets properities to default values
@@ -24,9 +24,8 @@ namespace MineSweeper.Models
             visited = false;
             live = false;
             liveNeighbors = 0;
-
-            
+            flag = false;
+            enabled = true;
         }
-
     }
 }
