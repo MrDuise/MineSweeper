@@ -4,7 +4,11 @@
     {
         <img class="game-button-image" src="~/img/Flag.png" />
         Model.enabled = false;
-    } else
+    } else if (Model.flag == false && Model.visited)
+    {
+        <img class="game-button-image" src="~/img/BlueB.png"/>
+    }
+    else
     {
         <img class="game-button-image" src="~/img/ButtonImg.png" />
     }

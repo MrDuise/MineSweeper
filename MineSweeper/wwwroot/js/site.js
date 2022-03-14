@@ -9,10 +9,7 @@
     $(document).on("mousedown", ".game-button", function (event) {
         switch (event.which) {
             case 1:
-                event.preventDefault();
-                var buttonNumber = $(this).val();
-                console.log("Button number " + buttonNumber + " was left clicked");
-                doButtonUpdate(buttonNumber, "/GameBoard/ShowOneButton");
+                break;
             case 2:
                 break;
             case 3:

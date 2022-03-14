@@ -37,7 +37,7 @@
 
             if (Model.ElementAt(i).enabled == true)
             {
-                <button class="game-button" name="buttonNumber" value="@Model.ElementAt(i).id" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                <button class="game-button" name="buttonNumber" id="@i" value="@Model.ElementAt(i).id" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
                     @if (Model.ElementAt(i).visited == true)
                     {
                         <img class="game-button-image" src="~/img/BlueB.png" />

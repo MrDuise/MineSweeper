@@ -42,10 +42,12 @@ namespace MineSweeper.Controllers
             return PartialView(buttons.ElementAt(buttonNumber));
         }
 
-
         public IActionResult RightClickShowButton(int buttonNumber)
         {
-            flagSwap(buttonNumber);
+            if (buttons.ElementAt(buttonNumber).visited == false)
+            {
+                flagSwap(buttonNumber);
+            }
             return PartialView("ShowOneButton", buttons.ElementAt(buttonNumber));
         }
 
