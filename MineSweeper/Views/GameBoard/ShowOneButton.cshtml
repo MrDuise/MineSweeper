@@ -1,0 +1,15 @@
+﻿@model MineSweeper.Models.ButtonModel
+<button class="game-button" name="buttonNumber" value="@Model.id" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+    @if (Model.flag == true)
+    {
+        <img class="game-button-image" src="~/img/Flag.png" />
+        Model.enabled = false;
+    } else if (Model.flag == false && Model.visited)
+    {
+        <img class="game-button-image" src="~/img/BlueB.png"/>
+    }
+    else
+    {
+        <img class="game-button-image" src="~/img/ButtonImg.png" />
+    }
+</button>
