@@ -7,20 +7,26 @@ namespace MineSweeper.Models
 {
     public class ButtonModel
     {
-       public int id { get; set; }
+        public int id { get; set; }
+        public int row { get; set; }
+        public int column { get; set; }
         public bool visited { get; set; }
         public bool live { get; set; }
         public int liveNeighbors { get; set; }
         public bool flag { get; set; }
+        public bool disabled { get; set; }
+
         public string buttonFile { get; set; }
         public bool enabled { get; set; }
 
         /// <summary>
         /// Constructor. Sets properities to default values
         /// </summary>
-        public ButtonModel(int ID)
+        public ButtonModel(int newID)
         {
-            id = ID;
+            id = newID;
+            row = 0;
+            column = 0;
             visited = false;
             live = false;
             liveNeighbors = 0;

@@ -1,15 +1,29 @@
 ﻿@model MineSweeper.Models.ButtonModel
-<button class="game-button" name="buttonNumber" value="@Model.id" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
-    @if (Model.flag == true)
-    {
+
+
+
+@if (@Model.liveNeighbors > 0 && @Model.live == false && @Model.visited == true)
+{
+    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+        @Model.liveNeighbors
+    </button>
+}
+else if (Model.flag == true)
+{
+    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
         <img class="game-button-image" src="~/img/Flag.png" />
-        Model.enabled = false;
-    } else if (Model.flag == false && Model.visited)
-    {
-        <img class="game-button-image" src="~/img/BlueB.png"/>
-    }
-    else
-    {
-        <img class="game-button-image" src="~/img/ButtonImg.png" />
-    }
-</button>
+    </button>
+
+    Model.enabled = false;
+}
+else if (@Model.live == false && @Model.liveNeighbors == 0 && @Model.visited == true)
+{
+    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+    </button>
+}
+else if (Model.visited == false)
+{
+    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+    ?
+    </button>
+}
