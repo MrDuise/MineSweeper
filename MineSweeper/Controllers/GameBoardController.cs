@@ -128,14 +128,14 @@ namespace MineSweeper.Controllers
             {
                 Console.WriteLine("checking end game contiontion " + playingNonBombs + " " + numNonBombs);
                 //not real view name
-                return GameWon();
+                return gameWon();
             }
             return View("Index", buttons);
         }
 
-        public IActionResult GameWon()
+        public IActionResult gameWon()
         {
-            return View("GameWon");
+            return View("gameWon");
         }
 
         public IActionResult GameLost()
