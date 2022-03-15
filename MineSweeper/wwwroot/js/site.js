@@ -15,8 +15,15 @@
             case 3:
                 event.preventDefault();
                 var buttonNumber = $(this).val();
+                //turn the first and 3rd element of the array into variables then convert those to intergers
+                let row = buttonNumber[0];
+                let col = buttonNumber[2];
+                row = Number(row);
+                col = Number(col);
+                let buttonID = row * 8 + col;
+               
                 console.log("Button number " + buttonNumber + " was right clicked");
-                doButtonUpdate(buttonNumber, "/GameBoard/RightClickShowButton");
+                doButtonUpdate(buttonID, "/GameBoard/RightClickShowButton");
                 break;
             default:
                 alert('Nothing');
