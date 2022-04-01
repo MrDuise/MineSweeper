@@ -1,7 +1,74 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<MineSweeper.Models.ButtonModel>
 
 
-<h1> Game Won!!! Good job soilder</h1>
+<h1> Nice Job! You won!</h1>
+<style>
+    .game-button {
+        width: 74px;
+        height: 74px;
+        text-align: center;
+        background-color: lightblue;
+    }
+
+    .game-button-image {
+        width: 70%;
+    }
+
+    .button-zone {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .line-break {
+        flex-basis: 100%;
+        height: 0;
+    }
+</style>
+
+<br />
+
+
+
+<form id="button-grid">
+    <div class="button-zone">
+
+        @for (int b = 0; b < @Model.Count(); b++)
+        {
+            if (b % 8 == 0)
+            {
+                <div class="line-break"></div>
+            }
+
+
+            <div class="OneButton" id="@b">
+
+                @if (@Model.ElementAt(b).liveNeighbors > 0 && @Model.ElementAt(b).live == false && @Model.ElementAt(b).visited == true)
+                {
+                    <button class="game-button" name="buttonId" id="gameButton" value="@Model.ElementAt(b).row @Model.ElementAt(b).column" disabled type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                        @Model.ElementAt(b).liveNeighbors
+                    </button>
+                }
+                @if (@Model.ElementAt(b).live == false && @Model.ElementAt(b).liveNeighbors == 0 && @Model.ElementAt(b).visited == true)
+                {
+                    <button class="game-button" name="buttonId" id="gameButton" value="@Model.ElementAt(b).row @Model.ElementAt(b).column" disabled type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                    </button>
+                }
+                @if (Model.ElementAt(b).live == true)
+                {
+                    <button class="game-button" name="buttonId" id="gameButton" value="@Model.ElementAt(b).row @Model.ElementAt(b).column" disabled type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                        <img class="game-button-image" src="~/img/BlueB.png" alt="bomb" />
+                    </button>
+                }
+                @if (@Model.ElementAt(b).visited == false)
+                {
+                    <button class="game-button" name="buttonId" id="gameButton" value="@Model.ElementAt(b).row @Model.ElementAt(b).column" disabled type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                        ?
+                    </button>
+                }
+
+            </div>
+        }
+
+
+    </div>
+</form>
