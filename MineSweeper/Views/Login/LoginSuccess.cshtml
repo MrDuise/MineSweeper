@@ -1,28 +1,29 @@
 ﻿@model MineSweeper.Models.UserModel
 
+<style>
+    .Headingtext{
+        text-align: center;
+    }
+
+    .bodyTxt {
+        text-align: center;
+    }
+</style>
+
+
 <br />
 <div>
-    <h4>Login Success</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-  
-    </dl>
+    <div class="Headingtext">
+        <h2>Login Success</h2>
+        <br />
+        <h3>Use the link below to coninue to the game! Good luck! </h3>
+
+    </div>
+    <h2></h2>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a> |
+<div class="bodyTxt">
+    <a asp-action="Index">Back to Login</a> |
     <a asp-controller="GameBoard" asp-action="Index">Game Board</a>
 
 </div>
