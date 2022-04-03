@@ -1,29 +1,96 @@
-﻿@model MineSweeper.Models.ButtonModel
+﻿@model MineSweeper.Models.BoardModel
 
 
 
-@if (@Model.liveNeighbors > 0 && @Model.live == false && @Model.visited == true)
-{
-    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
-        @Model.liveNeighbors
-    </button>
-}
-else if (Model.flag == true)
-{
-    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
-        <img class="game-button-image" src="~/img/Flag.png" />
-    </button>
 
-    Model.enabled = false;
-}
-else if (@Model.live == false && @Model.liveNeighbors == 0 && @Model.visited == true)
+<p>The current time is @DateTime.Now</p>
+
+<br />
+
+@for (int b = 0; b < Model.size; b++)
 {
-    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
-    </button>
-}
-else if (Model.visited == false)
-{
-    <button class="game-button" name="buttonId" id="@Model.id" value="@Model.row @Model.column" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
-    ?
-    </button>
+    @for (int c = 0; c < Model.size; c++)
+    {
+
+
+<div class="OneButton" id="@b">
+    <!-- while the game is still running-->
+    @if (@Model.Grid[b, c].enabled == true)
+    {
+
+        @if (@Model.Grid[b, c].visited == false)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                ?
+            </button>
+        }
+
+        else if (Model.Grid[b, c].flag == true)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                <img class="game-button-image" src="~/img/Flag.png" />
+            </button>
+
+            Model.Grid[b, c].enabled = false;
+        }
+        else if (@Model.Grid[b, c].liveNeighbors > 0 && @Model.Grid[b, c].live == false && @Model.Grid[b, c].visited == true)
+        {
+            <button class="game-button" name="buttonId" id="gameButton" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                @Model.Grid[b, c].liveNeighbors
+            </button>
+        }
+        else if (@Model.Grid[b, c].live == false && @Model.Grid[b, c].liveNeighbors == 0 && @Model.Grid[b, c].visited == true)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+            </button>
+        }
+        else if (Model.Grid[b, c].live == true)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" disabled type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                <img class="game-button-image" src="~/img/bomb.png" alt="bomb" />
+            </button>
+        }
+
+
+    }
+
+    else
+    {
+        @if (@Model.Grid[b, c].visited == false)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                ?
+            </button>
+        }
+
+        else if (Model.Grid[b, c].flag == true && Model.Grid[b, c].visited == true)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                <img class="game-button-image" src="~/img/Flag.png" />
+            </button>
+
+            Model.Grid[b, c].enabled = false;
+        }
+        else if (@Model.Grid[b, c].live == false && @Model.Grid[b, c].liveNeighbors == 0 && @Model.Grid[b, c].visited == true)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+            </button>
+        }
+        else if (@Model.Grid[b, c].liveNeighbors > 0 && @Model.Grid[b, c].live == false && @Model.Grid[b, c].visited == true)
+        {
+            <button class="game-button" name="buttonId" id="@b" value="@b @c" type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                @Model.Grid[b, c].liveNeighbors
+            </button>
+        }
+        else if (Model.Grid[b, c].live == true)
+        {
+            <button class="game-button" name="buttonId" id="gameButton" value="@b @c" disabled type="submit" asp-controller="GameBoard" asp-action="HandleButtonClick">
+                <img class="game-button-image" src="~/img/bomb.png" alt="bomb" />
+            </button>
+        }
+    }
+</div>
+
+    }
+<div class="line-break"></div>
 }
