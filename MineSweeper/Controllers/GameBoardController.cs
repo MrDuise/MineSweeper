@@ -23,221 +23,115 @@ namespace MineSweeper.Controllers
     public class GameBoardController : Controller
     {
 
+        static BoardModel board;
 
-        static List<ButtonModel> buttons = new List<ButtonModel>();
-        public BoardModel board = new BoardModel(8, 25);
-        int playingNonBombs = 0;//counter to hold the number of cells that the user has clicked on that are not bombs
-        int numNonBombs = 0;//number of cells that are not bombs
-
+        double difficulity = 0.00;
+        int size;
 
 
-        Random random = new Random();
-        const int buttons_SIZE = 64;
-        int size = Convert.ToInt32(Math.Sqrt(buttons_SIZE));
-
+        public IActionResult PageSetup(string boardSize, string gameDiff)
+        {
+            size = Convert.ToInt32(boardSize);
+            difficulity = Convert.ToDouble(gameDiff);
+            board = new BoardModel(size, difficulity);
+            return Index();
+        }
 
         public IActionResult Index()
         {
-
-            int index = 0;
-
-            if (buttons.Count < buttons_SIZE)
-            {
-                for (int row = 0; row < 8; row++)
-                {
-                    for (int col = 0; col < 8; col++)
-                    {
-                        buttons.Add(new ButtonModel(index));
-                        buttons[index].row = row;
-                        buttons[index].column = col;
-                        index++;
-                    }
-                }
-
-            }
-
-            int i = 0;
-            //sets up the bombs
-            //sets the live neighbors of every cell
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    if (board.Grid[row, col].live == true)
-                    {
-                        buttons[i].live = true;
-                    }
-                    buttons.ElementAt(i).liveNeighbors = board.Grid[row, col].liveNeighbors;
-                    Console.WriteLine("board model live neighbors: " + board.Grid[row, col].liveNeighbors);
-                    Console.WriteLine("buttons view live neighbors: " + buttons.ElementAt(i).liveNeighbors);
-
-
-
-                    i++;
-                }
-            }
-
-
-            Console.WriteLine(numNonBombs);
-            return View("Index", buttons);
-
+            return View("Index", board);
         }
 
 
 
 
 
-        public IActionResult HandleButtonClick(string buttonId)
+        public IActionResult HandleButtonClick(int row, int col)
         {
-            string[] values = buttonId.Split(' ');
-            int row = Convert.ToInt32(values[0]);
-            int col = Convert.ToInt32(values[1]);
-            Console.WriteLine(row + " " + col);
+           
+            //calls board.leftClick and checks for flag
+            PlaceTurn(row, col);
 
-            int bn = row * size + col;
-            Console.WriteLine(bn);
-            if (buttons.ElementAt(bn).enabled == true)
+            //check for end-game contitions
+            if (board.checkForLose())
             {
-                buttons.ElementAt(bn).visited = true;
+                board.revealBombs();
+
+                return PartialView("GameLost", board);
             }
-
-            board.FloodFill(row, col);
-
-            refresh();
-
-            playingNonBombs = board.caliculateCellsNotBombsOnBoardWhilePlaying();
-
-            //counter to hold the number of non live cells
-            numNonBombs = caliculateNonBombsOnBoard();
-
-
-            //Console.WriteLine(buttonId);
-            //int row = buttonId/size;
-            //int col = buttonId%size;
-
-            //if button clicked on was a bomb
-            if (buttons.ElementAt(row * size + col).live == true)
+            else if (board.checkForWin())
             {
-                //sets the trigger to disable the buttons
-                buttons.ForEach(button => button.disabled = true);
-                revealBombs();
-
-                return GameLost();
-            }
-            else if (playingNonBombs == numNonBombs)
-            {
-                Console.WriteLine("checking end game contiontion " + playingNonBombs + " " + numNonBombs);
                 //not real view name
-                return gameWon();
+                return GameWon();
             }
-            return View("Index", buttons);
+            return PartialView("ShowOneButton", board);
         }
 
-        public IActionResult gameWon()
+
+        public IActionResult ShowOneButton()
         {
-            return View("gameWon");
+
+            return PartialView("ShowOneButton", board);
+        }
+
+        public IActionResult RightClickShowButton(int row, int col)
+        {
+            flagSwap(row, col);
+
+            return PartialView("ShowOneButton", board);
+        }
+
+        public void flagSwap(int row, int col)
+        {
+
+            if (board.Grid[row, col].flag == false)
+            {
+                board.Grid[row, col].flag = true;
+                board.Grid[row, col].enabled = false;
+                board.Grid[row, col].visited = true;
+            }
+            else
+            {
+                board.Grid[row, col].flag = false;
+                board.Grid[row, col].enabled = true;
+                board.Grid[row, col].visited = false;
+            }
+        }
+
+
+
+        public void PlaceTurn(int rowNumber, int columnNumber)
+        {
+            //used for testing
+            Console.WriteLine(rowNumber + " " + columnNumber);
+
+
+            if (board.Grid[rowNumber, columnNumber].enabled == true)
+            {
+                board.Grid[rowNumber, columnNumber].visited = true;
+            }
+            // update board.  false = update only one square.
+            board.leftClick(rowNumber, columnNumber);
+
+        }
+
+
+
+
+
+
+
+        public IActionResult GameWon()
+        {
+            return View("GameWon");
         }
 
         public IActionResult GameLost()
         {
 
-            return View("GameLost", buttons);
+            return PartialView("GameLost", board);
         }
 
-        public IActionResult ShowOneButton(int buttonNumber)
-        {
-            //string[] values = buttonNumber.Split(' ');
-            //int row = Convert.ToInt32(values[0]);
-            //int col = Convert.ToInt32(values[1]);
-            //Console.WriteLine(row + " " + col);
-
-            //int bn = row * size + col;
-            return PartialView("ShowOneButton", buttons.ElementAt(buttonNumber));
-        }
-
-        public IActionResult RightClickShowButton(int buttonNumber)
-        {
-           // string[] values = buttonNumber.Split(' ');
-            //int row = Convert.ToInt32(values[0]);
-            //int col = Convert.ToInt32(values[1]);
-            //Console.WriteLine(row + " " + col);
-
-            //int bn = row * size + col;
-            if (buttons.ElementAt(buttonNumber).visited == false)
-            {
-                flagSwap(buttonNumber);
-
-            }
-            return PartialView("ShowOneButton", buttons.ElementAt(buttonNumber));
-        }
-
-        public void flagSwap(int buttonNumber)
-        {
-            if (buttons.ElementAt(buttonNumber).flag == false)
-            {
-                buttons.ElementAt(buttonNumber).flag = true;
-                buttons.ElementAt(buttonNumber).enabled = false;
-            }
-            else
-            {
-                buttons.ElementAt(buttonNumber).flag = false;
-                buttons.ElementAt(buttonNumber).enabled = true;
-            }
-        }
-
-
-        public void revealBombs()
-        {
-            int i = 0;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    if (buttons.ElementAt(row * size + col).live == true)
-                    {
-                        buttons[i].visited = true;
-                    }
-                    i++;
-                }
-            }
-        }
-
-        public void refresh()
-        {
-            int i = 0;
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    if (board.Grid[row, col].visited == true && board.Grid[row,col].live == false)
-                    {
-                        buttons[i].visited = true;
-                    }
-                    i++;
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Caliculates the number of cells that are not bombs on the board
-        /// </summary>
-        /// <returns></returns>
-        public int caliculateNonBombsOnBoard()
-        {
-            int numNonBombs = 0;
-            for (int a = 0; a < size; a++)
-            {
-                for (int b = 0; b < size; b++)
-                {
-                    if (buttons.ElementAt(a * size + b).live == false)
-                    {
-                        numNonBombs++;
-                    }
-                }
-            }
-            return numNonBombs;
-        }
 
 
 

@@ -1,0 +1,60 @@
+﻿
+
+<h1>Game Setup</h1>
+
+<form>
+
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-label col-sm-2 pt-0">Board Size</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="boardSize" id="small" value="5">
+                    <label class="form-check-label" for="small">
+                        5*5 Grid
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="boardSize" id="medium" value="8">
+                    <label class="form-check-label" for="medium">
+                        8*8 Grid
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="boardSize" id="large" value="10">
+                    <label class="form-check-label" for="large">
+                        10*10 Grid
+                    </label>
+                </div>
+            </div>
+            <br />
+            <legend class="col-form-label col-sm-2 pt-0">Game Difficulity</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gameDiff" id="easy" value="0.05">
+                    <label class="form-check-label" for="easy">
+                        Easy
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gameDiff" id="medium" value="0.25">
+                    <label class="form-check-label" for="medium">
+                        Medium
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gameDiff" id="hard" value="0.5">
+                    <label class="form-check-label" for="hard">
+                        Hard
+                    </label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" asp-controller="GameBoard" asp-action="PageSetup">Create Board</button>
+        </div>
+    </div>
+</form>

@@ -10,7 +10,7 @@ namespace MineSweeper.Models
         //board is square, so size is both the length and width of the board
         public int size { get; private set; }
 
-         public ButtonModel[,] Grid { get; private set; }
+        public Cell[,] Grid { get; private set; }
 
         //A percentage of cells that will be set to "live" status.
         public double difficulity = 0.00;
@@ -24,7 +24,7 @@ namespace MineSweeper.Models
 
             difficulity = difficulityVal;
 
-            Grid = new ButtonModel[size, size];
+            Grid = new Cell[size, size];
 
             int index = 0;
             //initialize the array so a Button object is stored in each location
@@ -33,63 +33,44 @@ namespace MineSweeper.Models
             {
                 for (int b = 0; b < size; b++)
                 {
-                    Grid[a, b] = new ButtonModel(index);
-                    Grid[a, b].row = a;
-                    Grid[a, b].column = b;
+                    Grid[a, b] = new Cell(index)
+                    {
+                        row = a,
+                        column = b
+                    };
                     index++;
                 }
             }
 
-            setupliveNeighbors();
+            setupBombs();
             //Grid[0, 0].live = true; //used for testing the end game contition 
+            //Grid[0, 0].flag = true;
+            //Grid[0, 0].visited = true;
             CalcliveNeighbors();
 
         }
 
 
 
-        /// <summary>
-        /// Calculate a cells live neighbors. Cells can have between 0 and 8 live neighbors.
-        /// </summary>
-        /// <returns></returns>
-        public int calculateliveNeighborsForOneCell(int row, int col)
+        // Place bombs on some squares
+        public void setupBombs()
         {
-            int liveNeighbors = 0;
+            // Random number generator for calculating bomb placement
+            Random random = new Random();
 
-            //sets the start and end row and column for the search. Search is in a 3*3 square around the inputted cell location
-            int row_start = row - 1; int row_end = row + 1; int col_start = col - 1; int col_end = col + 1;
-
-            //setup for if row or column is at the far ends of the grid
-            if (row_start <= 0)
-                row_start = 0;
-
-            if (row_end == size)
-                row_end = size - 1;
-
-
-            if (col_start <= 0)
-                col_start = 0;
-
-            if (col_end == size)
-                col_end = size - 1;
-
-
-            //this section does the checking for the live bombs
-            for (int i = row_start; i <= row_end; i++)
+            // Loop through entire grid
+            for (int i = 0; i < size; i++)
             {
-                for (int j = col_start; j <= col_end; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    if (Grid[i, j].live == true)
-                        liveNeighbors++;
+                    // choose a random number between 0.00 and 1.00.  If random  < difficulty then place a bomb on this square.
+                    Grid[i, j].live = random.NextDouble() <= difficulity;
                 }
             }
 
-            return liveNeighbors;
         }
 
-        /// <summary>
-        /// Calcualtes the number of live bombs for the entire board and stores the numbers in each cells liveNeighbors property
-        /// </summary>
+        // Calculate how many neighbors are live / bombs
         public void CalcliveNeighbors()
         {
             for (int r = 0; r < size; r++)
@@ -126,29 +107,63 @@ namespace MineSweeper.Models
             }
         }
 
-        /// <summary>
-        /// randomly inatilize the grid with live bombs. based off the difficulity property
-        /// </summary>
-        public void setupliveNeighbors()
+        internal bool checkForWin()
         {
-            int howHard = Convert.ToInt32(this.difficulity);
-            Random rand = new Random();
+            // assume victory until proven otherwise.
+            bool won = true;
 
-
-
-            for (int a = 0; a < size; a++)
+            // double for loop to check every cell status.
+            for (int r = 0; r < size; r++)
             {
-
-                for (int b = 0; b < size; b++)
+                for (int c = 0; c < size; c++)
                 {
-                    int randNum = rand.Next(1, 100);
-                    if (randNum <= howHard)
+                    if (Grid[r, c].visited == false && Grid[r, c].live == false)
                     {
-                        Grid[a, b].live = true;
+                        // if a cell is not visited and does not have a bomb, then the game is not over. must continue playing.
+                        won = false;
+                        // break because there is no need to continue checking other cells on the board.
+                        break;
                     }
+                    if (Grid[r, c].live == true && Grid[r, c].flag == false)
+                    {
+                        // if a cell has a bomb and does not have a flag, then the game is not over. must continue.
+                        won = false;
+                        break;
+                    }
+                }
+                // break because there is no need to continue checking other cells on the board.
+                if (!won) break;
+            }
+            return won;
+        }
 
+        internal bool checkForLose()
+        {
+            bool lost = false;
+
+            for (int r = 0; r < size; r++)
+            {
+                for (int c = 0; c < size; c++)
+                {
+                    if (Grid[r, c].live && Grid[r, c].visited && !Grid[r, c].flag)
+                    {
+                        lost = true;
+                    }
                 }
             }
+
+            return lost;
+        }
+
+
+        internal void leftClick(int rowGuess, int colGuess)
+        {
+            if (!Grid[rowGuess, colGuess].flag)
+            {
+                FloodFill(rowGuess, colGuess);
+
+            }
+
         }
 
         /// <summary>
@@ -201,32 +216,28 @@ namespace MineSweeper.Models
 
         }
 
-        public bool isValid(int r, int c)
-        {
-            return (r >= 0 && r < size && c >= 0 && c < size);
-        }
 
-    
-
-        /// <summary>
-        /// calculates the number of cells that are not bombs that have been visited while playing the game
-        /// </summary>
-        /// <returns></returns>
-        public int caliculateCellsNotBombsOnBoardWhilePlaying()
+        public void revealBombs()
         {
-            int numNonBombsInGame = 0;
-            for (int a = 0; a < size; a++)
+            int i = 0;
+            for (int row = 0; row < size; row++)
             {
-                for (int b = 0; b < size; b++)
+                for (int col = 0; col < size; col++)
                 {
-                    if (Grid[a, b].live == false && Grid[a, b].visited == true && Grid[a, b].flag == false)
+                    if (Grid[row, col].live == true)
                     {
-                        numNonBombsInGame++;
+                        Grid[row, col].visited = true;
                     }
+                    i++;
                 }
             }
-            return numNonBombsInGame;
         }
+
+
+
+
+
+
 
     }
 }
