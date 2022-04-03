@@ -123,7 +123,9 @@ namespace MineSweeper.Controllers
 
         public IActionResult GameWon()
         {
+
             return PartialView("GameWon", board);
+
         }
 
         public IActionResult GameLost()
