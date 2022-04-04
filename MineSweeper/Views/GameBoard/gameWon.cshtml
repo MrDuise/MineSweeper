@@ -1,7 +1,24 @@
 ﻿@model MineSweeper.Models.BoardModel
 
 
-<h1> You Won. Congratulations!!</h1>
+<style>
+
+
+    .bodyTxt {
+        text-align: center;
+    }
+</style>
+
+
+
+<div class="bodyTxt">
+    <h1> You won! Congradulations!</h1>
+    <h2>Click the link below to start a new game!</h2>
+
+
+    <a asp-controller="boardsetup" asp-action="Index">Game Board</a>
+
+</div>
 <style>
     .game-button {
         width: 74px;
