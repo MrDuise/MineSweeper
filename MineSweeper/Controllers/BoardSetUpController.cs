@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MineSweeper.Models;
+using MineSweeper.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

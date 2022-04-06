@@ -23,7 +23,7 @@ namespace MineSweeper.Controllers
     public class GameBoardController : Controller
     {
 
-        static BoardModel board;
+        public static BoardModel board;
 
         double difficulity = 0.00;
         int size;
@@ -132,11 +132,5 @@ namespace MineSweeper.Controllers
         {
             return PartialView("GameLost", board);
         }
-
-
-
-
-
-
     }
 }

@@ -50,6 +50,21 @@ namespace MineSweeper.Models
 
         }
 
+        public BoardModel(int sizeVal, double difficultyVal, Cell[,] cells)
+        {
+            size = sizeVal;
+
+            difficulity = difficultyVal;
+
+            Grid = cells;
+
+            setupBombs();
+            //Grid[0, 0].live = true; //used for testing the end game contition 
+            //Grid[0, 0].flag = true;
+            //Grid[0, 0].visited = true;
+            CalcliveNeighbors();
+        }
+
 
 
         // Place bombs on some squares
