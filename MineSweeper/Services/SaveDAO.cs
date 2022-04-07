@@ -46,12 +46,6 @@ namespace MineSweeper.Services
 
                 try
                 {
-                    BoardModel oldSave = getSavedBoard(user);
-                    if (oldSave != null)
-                    {
-                        deleteSave(user);
-                    }
-
                     connection.Open();
                     MySqlDataReader reader = command.ExecuteReader();
 
@@ -70,13 +64,87 @@ namespace MineSweeper.Services
             return false;
         }
 
+        public List<BoardModel> AllBoards()
+        {
+            string statement = "SELECT * FROM `saved-games`";
+
+            List<BoardModel> foundBoards = new List<BoardModel>();
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                MySqlCommand command = new MySqlCommand(statement, connection);
+
+                try
+                {
+                    connection.Open();
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        string user = "";
+                        string saveBoard = "";
+                        while (reader.Read())
+                        {
+                            user = (string)reader[1];
+                            saveBoard = (string)reader[2];
+
+                            BoardModel board = deserializer(saveBoard);
+                            foundBoards.Add(board);
+                        }
+
+                        return foundBoards;
+                    }
+                    return null;
+                    
+                }catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+            }
+        }
+
+        public BoardModel GetBoardById(int id)
+        {
+            string statement = "SELECT * FROM `saved-games` WHERE ID = @id";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                MySqlCommand command = new MySqlCommand(statement, connection);
+                command.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    connection.Open();
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    string user = "";
+                    string saveBoard = "";
+                    while (reader.Read())
+                    {
+                        user = (string)reader[1];
+                        saveBoard = (string)reader[2];
+                    }
+
+                    BoardModel board = deserializer(saveBoard);
+                    return board;
+                } catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+            }
+        }
+
         /// <summary>
         /// Method used for getting a saved gameboard from the database
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public BoardModel getSavedBoard(string username)
+        public List<BoardModel> getSavedBoard(string username)
         {
+            List<BoardModel> foundBoards = new List<BoardModel>();
+
             string statement = "SELECT * FROM `saved-games` WHERE USER = @user";
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -99,17 +167,14 @@ namespace MineSweeper.Services
                         {
                             user = (string)reader[1];
                             saveBoard = (string)reader[2];
+
+                            BoardModel board = deserializer(saveBoard);
+                            foundBoards.Add(board);
                         }
 
-                        BoardModel board = deserializer(saveBoard);
-                        return board;
+                        return foundBoards;
                     }
-                    else
-                    {
-                        return null;
-                    }
-
-
+                    return null;
                 }
                 catch (Exception ex)
                 {
@@ -124,16 +189,16 @@ namespace MineSweeper.Services
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public bool deleteSave(string username)
+        public bool deleteSave(int id)
         {
-            string statement = "DELETE FROM `saved-games` WHERE USER = @user";
+            string statement = "DELETE FROM `saved-games` WHERE ID = @id";
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(statement, connection);
 
                 //Define the values of the two placeholders in the sqlStatement string
-                command.Parameters.Add("@USER", MySqlDbType.VarChar, 200).Value = username;
+                command.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
 
                 try
                 {
