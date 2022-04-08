@@ -9,8 +9,10 @@ using System.Web.Http.Description;
 
 namespace MineSweeper.Controllers
 {
+
     //[ApiController]
     //[Route("api/[controller]")]
+
     public class SaveController : Controller
     {
         SaveDAO saveGame = new SaveDAO();
@@ -30,11 +32,13 @@ namespace MineSweeper.Controllers
 
         //[HttpGet("getSavedBoard")]
         //[ResponseType(typeof(BoardModel))]
-        public ActionResult<BoardModel> GetSavedBoard(string username)
-        {
-            BoardModel board = saveGame.getSavedBoard(username);
 
-            return board;
+        public ActionResult<List<BoardModel>> GetSavedBoard(string username)
+        {
+            List<BoardModel> boards = saveGame.getSavedBoard(username);
+
+            return boards;
+       
         }
 
     }
