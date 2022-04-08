@@ -46,6 +46,7 @@ namespace MineSweeper.Services
 
                 try
                 {
+
                     connection.Open();
                     MySqlDataReader reader = command.ExecuteReader();
 
@@ -63,6 +64,7 @@ namespace MineSweeper.Services
 
             return false;
         }
+
 
         public List<BoardModel> AllBoards()
         {
@@ -136,14 +138,17 @@ namespace MineSweeper.Services
             }
         }
 
+
         /// <summary>
         /// Method used for getting a saved gameboard from the database
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
+
         public List<BoardModel> getSavedBoard(string username)
         {
             List<BoardModel> foundBoards = new List<BoardModel>();
+
 
             string statement = "SELECT * FROM `saved-games` WHERE USER = @user";
 
@@ -168,6 +173,7 @@ namespace MineSweeper.Services
                             user = (string)reader[1];
                             saveBoard = (string)reader[2];
 
+
                             BoardModel board = deserializer(saveBoard);
                             foundBoards.Add(board);
                         }
@@ -175,6 +181,9 @@ namespace MineSweeper.Services
                         return foundBoards;
                     }
                     return null;
+
+                        
+
                 }
                 catch (Exception ex)
                 {
@@ -189,16 +198,20 @@ namespace MineSweeper.Services
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
+
         public bool deleteSave(int id)
         {
             string statement = "DELETE FROM `saved-games` WHERE ID = @id";
+
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(statement, connection);
 
                 //Define the values of the two placeholders in the sqlStatement string
+
                 command.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
+
 
                 try
                 {
