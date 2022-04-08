@@ -255,7 +255,14 @@ namespace MineSweeper.Services
         public int getSize(string[] objects)
         {
             string str = removeSpecial(objects[objects.Length - 1]);
-            int size = Int32.Parse(str.Substring(4, 1));
+            int size;
+            try
+            {
+                size = Int32.Parse(str.Substring(4, 2));
+            } catch (Exception e)
+            {
+                size = Int32.Parse(str.Substring(4, 1));
+            }
 
             return size;
         }
