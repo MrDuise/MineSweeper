@@ -21,6 +21,7 @@ namespace MineSweeper.Controllers
         {
             List<BoardModel> savedBoards = dao.AllBoards();
 
+
             IEnumerable<BoardDTO> boardDTOList = from b in savedBoards
                                                  select
                                                  new BoardDTO(b.size, cellString(b), b.difficulity);
@@ -49,6 +50,7 @@ namespace MineSweeper.Controllers
             return cellString;
         }
 
+
         [HttpGet("showoneboard/{Id}")]
         [ResponseType(typeof(BoardDTO))]
         public ActionResult<BoardDTO> ShowOneBoard(int Id)
@@ -59,11 +61,13 @@ namespace MineSweeper.Controllers
             return boardDTO;
         }
 
+
         [HttpDelete("delete/{Id}")]
         public bool deleteOneBoard(int Id)
         {
             return dao.deleteSave(Id);
         }
+
 
     }
 }
